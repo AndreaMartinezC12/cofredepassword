@@ -3,7 +3,7 @@ from tkinter import filedialog, messagebox
 from tkinter import ttk
 import pandas as pd
 import os
-
+import bcrypt
 
 class PasswordApp:
     def __init__(self,root):
@@ -32,7 +32,9 @@ class PasswordApp:
         ttk.Button(root, text="Guardar cuenta", command=self.save_account).pack(pady=10)
         
     def save_account(self):
-        self.df.loc[len(self.df)] = [self.entrada_usuario.get(), self.entrada_contrasena.get()]
+        password = self.entrada_contrasena.get().encode()
+        hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+        self.df.loc[len(self.df)] = [self.entrada_usuario.get(), hashed]
         print(str(self.df) + "\n")
         print("ok")
   
