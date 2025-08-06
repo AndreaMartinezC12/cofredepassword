@@ -53,6 +53,9 @@ class PasswordApp:
         self.my_combobox.pack(pady=10)
 
         ttk.Button(root, text="Buscar", command=self.search_account).pack(pady=10)
+
+        self.lblresultado = tk.Label(root, text="", justify="left",)
+        self.lblresultado.pack()
         
     def save_account(self):
         password = self.entrada_contrasena.get().encode()
@@ -68,14 +71,16 @@ class PasswordApp:
         tipo_busqueda = self.my_combobox.get()
         if tipo_busqueda == "Aplicacion":
             result = self.df[self.df['Aplicacion'].str.contains(self.entrada_busqueda.get(), na=False)]
-            print(result)
         elif tipo_busqueda == "Usuario":
-            result = self.df[self.df['Usuario'].str.contains(self.entrada_busqueda.get(), na=False)]
-            print("algo")
+            result = self.df[self.df['User'].str.contains(self.entrada_busqueda.get(), na=False)]
         else:
-            print("algo")
+            messagebox.showinfo("Error en busqueda", "Selecciona 'aplicacion' o 'usuario' como tipo de busqueda")
 
-        tk.Label(root, text=result).pack()
+        if result.empty:
+            messagebox.showinfo("Sin resultados", "No se encontraron resultados")
+        else:
+            self.lblresultado.configure(text = result)
+            
   
 
 if __name__ == "__main__":
